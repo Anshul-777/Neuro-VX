@@ -158,6 +158,7 @@ const RegisterPage = () => {
       const bioMethods = JSON.parse(localStorage.getItem("nvx_bio_methods") || "{}");
       bioMethods[userKey] = "fingerprint";
       localStorage.setItem("nvx_bio_methods", JSON.stringify(bioMethods));
+      localStorage.setItem("nvx_current_user", userKey);
       setTimeout(() => navigate("/dashboard"), 1500);
     }
   };
@@ -173,6 +174,7 @@ const RegisterPage = () => {
         const bioMethods = JSON.parse(localStorage.getItem("nvx_bio_methods") || "{}");
         bioMethods[userKey] = "face";
         localStorage.setItem("nvx_bio_methods", JSON.stringify(bioMethods));
+        localStorage.setItem("nvx_current_user", userKey);
         setTimeout(() => navigate("/dashboard"), 1500);
       }
       setFaceScanning(false);
