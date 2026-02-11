@@ -8,6 +8,8 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
+import AccountPage from "./pages/AccountPage";
+import SettingsPage from "./pages/SettingsPage";
 import IntakeFormPage from "./pages/IntakeFormPage";
 import TestSelectionPage from "./pages/TestSelectionPage";
 import AnalysisPage from "./pages/AnalysisPage";
@@ -28,6 +30,8 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/intake" element={<IntakeFormPage />} />
             <Route path="/test-selection" element={<TestSelectionPage />} />
             <Route path="/analysis" element={<AnalysisPage />} />

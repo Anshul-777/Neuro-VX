@@ -105,6 +105,7 @@ const LoginPage = () => {
     }
     const success = await authenticateFingerprint(userKey);
     if (success) {
+      localStorage.setItem("nvx_current_user", userKey);
       setTimeout(() => navigate("/dashboard"), 1000);
     }
   };
@@ -123,6 +124,7 @@ const LoginPage = () => {
       setFaceScanning(true);
       const success = await completeFaceAuth(userKey, false);
       if (success) {
+        localStorage.setItem("nvx_current_user", userKey);
         setTimeout(() => navigate("/dashboard"), 1000);
       }
       setFaceScanning(false);
