@@ -1,0 +1,88 @@
+## Neuro-Vitals System: Local Integration and Usage Instructions
+
+This document outlines the file structure, explains the working principles of the Neuro-Vitals system, and provides exact steps to integrate and run it within VS Code or a similar local Python environment.
+
+### 1. File Structure
+
+The Neuro-Vitals project is organized into a `Neuro-VX` directory, with all core Python modules located in the `Neuro-VX/Backend` subdirectory.
+
+```
+Neuro-VX/
+├── Backend/
+│   ├── face_landmarker.task  # MediaPipe model for face landmark detection
+│   ├── analysis_results.py   # Data structure for consolidating analysis results
+│   ├── face_analyzer.py      # Module for 3D face analysis (landmarks)
+│   ├── gait_engine.py        # Module for gait analysis (pose estimation)
+│   ├── main_neuro_vitals.py  # Main application loop integrating all modules
+│   ├── processor.py          # Signal processing logic for rPPG
+│   ├── rppg_extractor.py     # rPPG signal extraction module
+│   ├── risk_stratifier.py    # Rule-based engine for correlating metrics to risks
+│   ├── ui_utils.py           # Utility functions for converting matplotlib plots to OpenCV images
+│   ├── voice_analyzer.py     # Module for voice analysis (MPT, Jitter, Shimmer, HNR)
+│   └── Notes/                 # This folder containing documentation files
+│       ├── README.md
+│       ├── instructions.txt
+│       └── commands.txt
+├── requirements.txt        # Python dependency list
+└── (other files/folders as needed for frontend, etc.)
+```
+
+### 2. Explanation of Working
+
+The Neuro-Vitals system operates by integrating several specialized Python modules to perform real-time, multi-modal biomarker extraction from a live webcam feed:
+
+-   **`face_analyzer.py`**: Initializes the MediaPipe Face Landmarker model. Its `analyze_face` method detects facial landmarks in each video frame, which are then used by other modules.
+-   **`rppg_extractor.py`**: Receives video frames and facial landmarks. It calculates the average RGB intensity from the forehead region over a sliding window. It uses the `SignalProcessor` to derive Heart Rate (HR), Heart Rate Variability (HRV - SDNN), and Respiratory Rate (RR) using the CHROM method and spectral analysis. It also prepares signals for real-time plotting.
+-   **`gait_engine.py`**: Utilizes MediaPipe Pose Estimation to detect body landmarks. It analyzes these landmarks over time to calculate gait parameters such as cadence, stride length, symmetry, and balance stability.
+-   **`voice_analyzer.py`**: Processes pre-recorded audio files (or can be adapted for live audio input). It uses `librosa` to calculate Maximum Phonation Time (MPT) and custom algorithms to estimate Jitter, Shimmer, and Harmonics-to-Noise Ratio (HNR).
+-   **`risk_stratifier.py`**: Collects metrics from the rPPG, Gait, Face, and Voice modules. It applies a rule-based system with predefined thresholds to identify potential health risk signals (e.g., cardiovascular, neuro-motor, speech pathology risks). It also provides a confidence score and lists any uncertainties (e.g., due to missing data).
+-   **`analysis_results.py`**: A simple data structure (`AnalysisResults` class) used to consolidate all the extracted metrics and risk assessment results, making it easy to pass this information between modules and to the UI.
+-   **`ui_utils.py`**: Contains helper functions, specifically `plot_to_image`, which converts `matplotlib` figures (like the rPPG plot) into OpenCV-compatible image formats, allowing them to be displayed directly on the live video feed.
+-   **`main_neuro_vitals.py`**: This is the central orchestration script. It initializes the webcam, instantiates all analyzer modules, processes video frames in a continuous loop, passes data between modules, updates the `AnalysisResults` object, and renders the multi-tiered user interface onto the live video feed using OpenCV (`cv2.imshow`).
+
+### 3. Steps to Integrate in VS Code
+
+To set up and run the Neuro-Vitals system on your local machine using VS Code, follow these detailed steps:
+
+1.  **Install VS Code and Python:**
+    *   If not already installed, download and install [Visual Studio Code](https://code.visualstudio.com/) and [Python 3.8+](https://www.python.org/downloads/). Ensure you add Python to your system's PATH during installation.
+
+2.  **Clone the Repository (or Recreate Project Structure):**
+    *   If you have a repository, clone it. Otherwise, manually create the directory structure: `Neuro-VX/Backend/`.
+
+3.  **Set up a Virtual Environment:**
+    *   Open VS Code and launch a new terminal (`Terminal > New Terminal`).
+    *   Navigate to your project's root directory (e.g., `cd Neuro-VX`).
+    *   Create and activate a virtual environment:
+        ```bash
+        python -m venv venv
+        # On Windows:
+        .\venv\Scripts\activate
+        # On macOS/Linux:
+        source venv/bin/activate
+        ```
+    *   You should see `(venv)` in your terminal prompt, indicating the virtual environment is active.
+
+4.  **Install Project Dependencies:**
+    *   With the virtual environment active, install the required Python libraries. The `requirements.txt` file located in the project root lists all necessary packages:
+        ```bash
+        pip install -r requirements.txt
+        ```
+
+5.  **Download MediaPipe Model:**
+    *   The `face_landmarker.task` model is essential. Make sure it's in the `Neuro-VX/Backend/` directory. If it's not, you might need to run a script to download it (see `commands.txt` for details).
+
+6.  **Place Python Modules:**
+    *   Ensure all Python files (`analysis_results.py`, `face_analyzer.py`, `gait_engine.py`, `main_neuro_vitals.py`, `processor.py`, `rppg_extractor.py`, `risk_stratifier.py`, `ui_utils.py`, `voice_analyzer.py`) are placed inside the `Neuro-VX/Backend/` directory.
+
+7.  **Run the Main Application:**
+    *   From the root of your `Neuro-VX` directory, with the virtual environment active, execute the main application script:
+        ```bash
+        python Backend/main_neuro_vitals.py
+        ```
+
+**Important Notes for Webcam Access:**
+*   Your operating system might prompt you for permission to access the webcam; grant it.
+*   Ensure your webcam drivers are up-to-date.
+*   If you have multiple webcams, you might need to modify `cv2.VideoCapture(0)` in `main_neuro_vitals.py` to `cv2.VideoCapture(1)`, `(2)`, etc.
+*   The live video output (`cv2.imshow()`) will appear in a separate window on your operating system, not directly within VS Code itself. Click on the video window and press the 'q' key to close it.

@@ -1,0 +1,169 @@
+# Neuro-Vitals System: Installation and Run Commands
+
+This file provides a consolidated list of all necessary installation commands (individual `pip install` commands where applicable, to avoid dependency conflicts) and commands to run the Python files in the correct order of working, with exact paths.
+
+--- General Setup: Python & VS Code ---
+1.  **Install Python 3.8+**: Download from [python.org/downloads](https://www.python.org/downloads/). Add to PATH during installation.
+2.  **Install VS Code**: Download from [code.visualstudio.com](https://code.visualstudio.com/).
+3.  **Open VS Code Terminal**: Navigate to your desired project location (e.g., `cd path/to/Neuro-Vitals`).
+4.  **Create Project Directory**: (If starting from scratch)
+    ```bash
+    mkdir Neuro-VX
+    cd Neuro-VX
+    mkdir -p Backend/Notes
+    ```
+
+--- Virtual Environment Setup ---
+5.  **Create Virtual Environment**:
+    ```bash
+    python -m venv venv
+    ```
+6.  **Activate Virtual Environment**:
+    *   **Windows**:
+        ```bash
+        .\venv\Scripts\activate
+        ```
+    *   **macOS/Linux**:
+        ```bash
+        source venv/bin/activate
+        ```
+    (Ensure `(venv)` appears in your terminal prompt after activation)
+
+--- Core Library Installations (Individual `pip install` commands) ---
+7.  **Install OpenCV Python**:
+    ```bash
+    pip install opencv-python
+    ```
+8.  **Install MediaPipe**:
+    ```bash
+    pip install mediapipe
+    ```
+9.  **Install NumPy**:
+    ```bash
+    pip install numpy
+    ```
+10. **Install SciPy**:
+    ```bash
+    pip install scipy
+    ```
+11. **Install Matplotlib**:
+    ```bash
+    pip install matplotlib
+    ```
+12. **Install Librosa** (for voice analysis):
+    ```bash
+    pip install librosa
+    ```
+13. **Install SoundFile** (dependency for Librosa audio operations):
+    ```bash
+    pip install soundfile
+    ```
+    *(Note: The `requirements.txt` file is located at the project root `Neuro-VX/requirements.txt` and can be used for bulk installation: `pip install -r requirements.txt`)*
+
+--- MediaPipe Model Download & Placement ---
+14. **Download Face Landmarker Model**: Save this as `face_landmarker.task` in the `Neuro-VX/` directory first.
+    (You would typically copy a pre-downloaded model or use a Python script to fetch it.)
+    ```python
+    # Python script to download model (example, save as download_model.py in Neuro-VX/)
+    import os
+    import urllib.request
+
+    model_url = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+    model_path = 'face_landmarker.task'
+
+    if not os.path.exists(model_path):
+        print(f"Downloading {model_path}...")
+        urllib.request.urlretrieve(model_url, model_path)
+        print("Download complete.")
+    else:
+        print(f"{model_path} already exists.")
+    # Then run: python download_model.py
+    ```
+15. **Move Model to Backend Directory**:
+    ```bash
+    mv face_landmarker.task Neuro-VX/Backend/
+    ```
+    (Alternatively, directly download to `Neuro-VX/Backend/` if possible)
+
+--- Writing Python Module Files ---
+*(These commands assume you have the content for each Python file ready. You would use `%%writefile` in a Jupyter/Colab environment or manually create/paste content into files in VS Code.)*
+
+16. **Create `processor.py`**:
+    File Path: `Neuro-VX/Backend/processor.py`
+    ```python
+    # ... (content of processor.py from notebook cell) ...
+    ```
+17. **Create `voice_analyzer.py`**:
+    File Path: `Neuro-VX/Backend/voice_analyzer.py`
+    ```python
+    # ... (content of voice_analyzer.py from notebook cell) ...
+    ```
+18. **Create `face_analyzer.py`**:
+    File Path: `Neuro-VX/Backend/face_analyzer.py`
+    ```python
+    # ... (content of face_analyzer.py from notebook cell) ...
+    ```
+19. **Create `rppg_extractor.py`**:
+    File Path: `Neuro-VX/Backend/rppg_extractor.py`
+    ```python
+    # ... (content of rppg_extractor.py from notebook cell) ...
+    ```
+20. **Create `gait_engine.py`**:
+    File Path: `Neuro-VX/Backend/gait_engine.py`
+    ```python
+    # ... (content of gait_engine.py from notebook cell) ...
+    ```
+21. **Create `analysis_results.py`**:
+    File Path: `Neuro-VX/Backend/analysis_results.py`
+    ```python
+    # ... (content of analysis_results.py from notebook cell) ...
+    ```
+22. **Create `risk_stratifier.py`**:
+    File Path: `Neuro-VX/Backend/risk_stratifier.py`
+    ```python
+    # ... (content of risk_stratifier.py from notebook cell) ...
+    ```
+23. **Create `ui_utils.py`**:
+    File Path: `Neuro-VX/Backend/ui_utils.py`
+    ```python
+    # ... (content of ui_utils.py from notebook cell) ...
+    ```
+24. **Create `main_neuro_vitals.py`**:
+    File Path: `Neuro-VX/Backend/main_neuro_vitals.py`
+    ```python
+    # ... (content of main_neuro_vitals.py from notebook cell) ...
+    ```
+
+--- Running the System ---
+25. **Run the Main Neuro-Vitals Application**:
+    (Ensure your virtual environment is active and you are in the `Neuro-VX` directory)
+    ```bash
+    python Backend/main_neuro_vitals.py
+    ```
+    *A live video window will open. Press 'q' on this window to quit the application.*
+
+--- Optional: Running Individual Module Test Blocks ---
+*(These are for verifying individual module functionality outside the main loop.)*
+
+26. **Test `voice_analyzer.py`**:
+    (Will generate `Neuro-VX/Backend/test_voice.wav` if not present)
+    ```bash
+    python Backend/voice_analyzer.py
+    ```
+27. **Test `face_analyzer.py`**:
+    (Will generate `Neuro-VX/Backend/test_face_image.png` if not present. Replace with actual face image for proper test.)
+    ```bash
+    python Backend/face_analyzer.py
+    ```
+28. **Test `gait_engine.py`**:
+    ```bash
+    python Backend/gait_engine.py
+    ```
+29. **Test `risk_stratifier.py`**:
+    ```bash
+    python Backend/risk_stratifier.py
+    ```
+30. **Test `analysis_results.py`**:
+    ```bash
+    python Backend/analysis_results.py
+    ```
