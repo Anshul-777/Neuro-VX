@@ -23,4 +23,4 @@ librosa==0.10.2
 soundfile==0.12.1
 
 # Utilities
-Pillow==10.3.0
+Pillow
